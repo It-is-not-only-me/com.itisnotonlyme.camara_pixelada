@@ -5,24 +5,26 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class PixelarCamara : MonoBehaviour
 {
-    [SerializeField] private RenderTexture _renderTextura;
     [SerializeField] private uint _anchoDeLaPantalla;
+
+    private RenderTexture _renderTextura;
 
     private void Start()
     {
         Camera camara = GetComponent<Camera>();
 
         float relacionDeAspectos = camara.aspect;
-        ActualizarDimension(relacionDeAspectos);
+        float altoDePantalla = AltoDeLaPantalla(_anchoDeLaPantalla, relacionDeAspectos);
+
+        _renderTextura = new RenderTexture(_anchoDeLaPantalla, altoDePantalla);
+
+
 
         camara.targetTexture = _renderTextura;
     }
 
-    private void ActualizarDimension(float relacionDeAspectos)
+    private float AltoDeLaPantalla(float anchoDeLaPantalla, float relacionDeAspectos)
     {
-        int altoDeLaPantalla = Mathf.CeilToInt(_anchoDeLaPantalla / relacionDeAspectos);
-
-        _renderTextura.width = (int)_anchoDeLaPantalla;
-        _renderTextura.height = altoDeLaPantalla;
+        return Mathf.CeilToInt(anchoDeLaPantalla / relacionDeAspectos);
     }
 }
